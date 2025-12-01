@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+.env
+
+# Local experiment output (sample_results.csv is kept on purpose)
+data/results.csv
+data/*.tmp
+reports/
+
+# OS / editor
+.DS_Store
+.ipynb_checkpoints/
