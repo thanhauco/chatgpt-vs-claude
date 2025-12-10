@@ -1,0 +1,52 @@
+# Benchmark prompts. `core_answer` is the minimal high-signal answer, used by the
+# offline mock provider and as a reference for the leanest possible response.
+prompts:
+  - id: capital_france
+    category: factual
+    prompt: "What is the capital of France?"
+    core_answer: "Paris."
+
+  - id: list_reverse_py
+    category: coding
+    prompt: "How do I reverse a list in Python?"
+    core_answer: "Use my_list[::-1] for a copy, or my_list.reverse() to reverse in place."
+
+  - id: git_undo_commit
+    category: howto
+    prompt: "How do I undo the last Git commit but keep my changes?"
+    core_answer: "Run git reset --soft HEAD~1. This keeps your changes staged."
+
+  - id: define_rlhf
+    category: definition
+    prompt: "What is RLHF in one short explanation?"
+    core_answer: "RLHF is reinforcement learning from human feedback: a reward model trained on human preferences fine-tunes the policy."
+
+  - id: tabs_vs_spaces
+    category: opinion
+    prompt: "Should I use tabs or spaces for indentation?"
+    core_answer: "Pick one and enforce it with a formatter; spaces are the more common default."
+
+  - id: http_500_debug
+    category: troubleshooting
+    prompt: "My API returns HTTP 500. How do I start debugging?"
+    core_answer: "Check the server logs for the stack trace, reproduce the request locally, then isolate the failing handler."
+
+  - id: sql_top_customers
+    category: coding
+    prompt: "Write a SQL query to get the top 5 customers by total order value."
+    core_answer: 'SELECT customer_id, SUM(order_value) AS total FROM orders GROUP BY customer_id ORDER BY total DESC LIMIT 5;'
+
+  - id: regex_email
+    category: coding
+    prompt: "What is a simple regex to validate an email address?"
+    core_answer: 'Use ^[^@\s]+@[^@\s]+\.[^@\s]+$ for a basic check.'
+
+  - id: pip_vs_conda
+    category: opinion
+    prompt: "Should I use pip or conda for Python packages?"
+    core_answer: "Use pip with venv for most projects; choose conda when you need non-Python binary dependencies."
+
+  - id: explain_async
+    category: definition
+    prompt: "What is async/await in one short explanation?"
+    core_answer: "async/await lets a function pause at awaits so the event loop can run other tasks without blocking threads."
