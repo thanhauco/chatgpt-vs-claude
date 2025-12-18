@@ -1,0 +1,32 @@
+# Prompt-engineering techniques audited for mitigating RLHF-induced verbosity.
+# `conciseness_level` (0-4) drives the offline mock; `suffix` is appended to the prompt.
+techniques:
+  - id: baseline
+    name: "Baseline (no constraint)"
+    conciseness_level: 0
+    suffix: ""
+
+  - id: be_concise
+    name: "Be concise"
+    conciseness_level: 1
+    suffix: " Be concise."
+
+  - id: no_preamble
+    name: "No preamble / no disclaimers"
+    conciseness_level: 2
+    suffix: " No preamble, no summary, no disclaimers. Just the answer."
+
+  - id: word_limit
+    name: "Hard word limit (40)"
+    conciseness_level: 3
+    suffix: " Answer in 40 words or fewer."
+
+  - id: bullets_3
+    name: "3 bullets, no caveats"
+    conciseness_level: 3
+    suffix: " Answer in 3 bullets, no caveats, no restating the question, only the highest-signal points."
+
+  - id: one_sentence
+    name: "One sentence only"
+    conciseness_level: 4
+    suffix: " Answer in exactly one sentence."

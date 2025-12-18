@@ -1,0 +1,71 @@
+# -----------------------------------------------------------------------------
+# RLHF transparency scorecard — EDITABLE ILLUSTRATIVE RUBRIC
+# -----------------------------------------------------------------------------
+# These scores are NOT authoritative. They are starting-point defaults meant to
+# structure your own assessment. Review each dimension against the cited sources
+# (and newer publications) and adjust. Scale: 0 = none, 5 = extensive public detail.
+meta:
+  scale: "0 (no public detail) .. 5 (extensive public detail)"
+  last_reviewed: "2026-06-18"
+  disclaimer: >
+    Illustrative defaults only. Alignment methods and disclosure practices change
+    frequently. Verify against the linked model/system cards and research papers
+    before citing these numbers anywhere.
+
+dimensions:
+  - id: model_card
+    name: "Model / system card published"
+    weight: 1
+    description: "Is there a public model or system card for the flagship model?"
+  - id: rlhf_method
+    name: "Alignment method disclosed"
+    weight: 1
+    description: "Is the preference-optimization method (RLHF / RLAIF / Constitutional AI) described?"
+  - id: preference_data
+    name: "Preference data sourcing disclosed"
+    weight: 1
+    description: "How human/AI preference data is collected and labeled."
+  - id: reward_model
+    name: "Reward model details disclosed"
+    weight: 1
+    description: "Architecture/training detail of the reward or preference model."
+  - id: length_bias
+    name: "Length / verbosity bias acknowledged"
+    weight: 1
+    description: "Does the vendor discuss verbosity or length bias and mitigations?"
+  - id: eval_transparency
+    name: "Evaluation transparency"
+    weight: 1
+    description: "Public benchmarks, safety evals, and methodology."
+  - id: reproducibility
+    name: "Weights / reproducibility"
+    weight: 1
+    description: "Open weights or enough detail to reproduce alignment behavior."
+
+providers:
+  openai:
+    label: "OpenAI (GPT)"
+    scores:
+      model_card: 4
+      rlhf_method: 4
+      preference_data: 2
+      reward_model: 2
+      length_bias: 2
+      eval_transparency: 3
+      reproducibility: 1
+    sources:
+      - "https://openai.com/research"
+      - "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+  anthropic:
+    label: "Anthropic (Claude)"
+    scores:
+      model_card: 4
+      rlhf_method: 4
+      preference_data: 3
+      reward_model: 3
+      length_bias: 3
+      eval_transparency: 3
+      reproducibility: 1
+    sources:
+      - "https://www.anthropic.com/research"
+      - "https://www.anthropic.com/news/claudes-constitution"
