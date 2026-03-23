@@ -32,6 +32,13 @@ FILLER_PHRASES: List[str] = [
     "as mentioned", "as previously stated", "for all intents and purposes",
 ]
 
+STOPWORDS = {
+    "the", "a", "an", "to", "of", "in", "on", "for", "and", "or", "is", "are",
+    "be", "it", "with", "as", "at", "by", "this", "that", "your", "you", "use",
+    "using", "via", "from", "can", "will", "into", "when", "if", "not", "no",
+    "but", "then", "than", "so", "most", "each", "any", "all", "i",
+}
+
 _WORD_RE = re.compile(r"[A-Za-z']+")
 _SENT_RE = re.compile(r"[^.!?]+[.!?]?")
 _LIST_RE = re.compile(r"(?m)^\s*(?:[-*\u2022]|\d+[.)])\s+")
@@ -86,3 +93,20 @@ def compute_metrics(text: str) -> Dict[str, float]:
         "caveat_density": round(caveat / denom, 4),
         "filler_density": round(filler / denom, 4),
     }
+
+
+def answer_coverage(text: str, core_answer: str) -> float:
+    """Fraction of the core answer's content keywords present in the response.
+
+    A simple offline proxy for "did the response still contain the key answer?"
+    so conciseness can be weighed against retained signal rather than rewarded blindly.
+    """
+    core_tokens = [
+        w for w in _WORD_RE.findall((core_answer or "").lower())
+        if w not in STOPWORDS and len(w) > 2
+    ]
+    if not core_tokens:
+        return 1.0
+    response_words = set(_WORD_RE.findall((text or "").lower()))
+    hits = sum(1 for t in set(core_tokens) if t in response_words)
+    return round(hits / len(set(core_tokens)), 4)
