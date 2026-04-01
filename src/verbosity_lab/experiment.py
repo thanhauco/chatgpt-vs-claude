@@ -6,7 +6,7 @@ from typing import Dict, List, Sequence
 
 import pandas as pd
 
-from .metrics import compute_metrics
+from .metrics import answer_coverage, compute_metrics
 from .providers import Provider
 
 
@@ -46,6 +46,9 @@ def run_experiment(
             "response": result.text,
         }
         row.update(compute_metrics(result.text))
+        cov = answer_coverage(result.text, prompt.get("core_answer", ""))
+        row["answer_coverage"] = cov
+        row["signal_efficiency"] = round(10 * cov / max(row["word_count"], 1), 3)
         rows.append(row)
         if verbose and (i % 50 == 0 or i == total):
             print(f"  [{i}/{total}] generated")

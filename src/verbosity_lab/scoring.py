@@ -41,20 +41,21 @@ def add_padding_score(df: pd.DataFrame) -> pd.DataFrame:
 
 def summarize(df: pd.DataFrame) -> pd.DataFrame:
     df = add_padding_score(df)
-    agg = (
-        df.groupby(["provider", "model"])
-        .agg(
-            responses=("response", "count"),
-            avg_words=("word_count", "mean"),
-            avg_tokens=("token_count", "mean"),
-            avg_sentences=("sentence_count", "mean"),
-            avg_hedge_density=("hedge_density", "mean"),
-            avg_caveat_density=("caveat_density", "mean"),
-            verbosity_bias=("verbosity_bias", "mean"),
-            padding_score=("padding_score", "mean"),
-        )
-        .reset_index()
+    agg_spec = dict(
+        responses=("response", "count"),
+        avg_words=("word_count", "mean"),
+        avg_tokens=("token_count", "mean"),
+        avg_sentences=("sentence_count", "mean"),
+        avg_hedge_density=("hedge_density", "mean"),
+        avg_caveat_density=("caveat_density", "mean"),
+        verbosity_bias=("verbosity_bias", "mean"),
+        padding_score=("padding_score", "mean"),
     )
+    if "answer_coverage" in df.columns:
+        agg_spec["avg_coverage"] = ("answer_coverage", "mean")
+    if "signal_efficiency" in df.columns:
+        agg_spec["avg_efficiency"] = ("signal_efficiency", "mean")
+    agg = df.groupby(["provider", "model"]).agg(**agg_spec).reset_index()
     for c in agg.columns:
         if agg[c].dtype.kind == "f":
             agg[c] = agg[c].round(3)
