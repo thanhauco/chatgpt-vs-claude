@@ -126,6 +126,30 @@ with tab_analysis:
             f"~{recipe['reduction_pct']:.0f}% vs an unconstrained prompt."
         )
 
+    if "answer_coverage" in df.columns:
+        st.markdown("---")
+        st.subheader("Conciseness vs. answer coverage")
+        st.caption(
+            "Top-left is best: few words, core answer retained. Bubble size = signal efficiency."
+        )
+        eff2 = (
+            df.groupby(["technique", "provider"])
+            .agg(
+                words=("word_count", "mean"),
+                coverage=("answer_coverage", "mean"),
+                efficiency=("signal_efficiency", "mean"),
+            )
+            .reset_index()
+        )
+        fig = px.scatter(
+            eff2, x="words", y="coverage", color="provider", text="technique",
+            size="efficiency", color_discrete_map=PROVIDER_COLORS,
+            title="Words vs. core-answer coverage by technique",
+        )
+        fig.update_traces(textposition="top center")
+        fig.update_yaxes(range=[0, 1.05])
+        st.plotly_chart(fig, use_container_width=True)
+
     st.markdown("---")
     st.subheader("Temperature sensitivity")
     st.caption("Slope = extra words per +1.0 temperature. Higher = more length sensitivity.")
@@ -226,8 +250,10 @@ with tab_data:
     show_cols = [
         "provider", "prompt_id", "category", "technique", "temperature",
         "word_count", "token_count", "hedge_density", "caveat_density",
+        "answer_coverage", "signal_efficiency",
         "verbosity_bias", "padding_score", "response",
     ]
+    show_cols = [c for c in show_cols if c in df.columns]
     st.dataframe(df[show_cols], use_container_width=True, hide_index=True)
     st.download_button(
         "Download filtered CSV",
