@@ -98,6 +98,8 @@ streamlit run dashboard/app.py   # then upload data/results.csv in the sidebar
 | `type_token_ratio` | Lexical diversity (unique words ÷ words). |
 | `verbosity_bias` | For each prompt, extra words vs the **leanest** answer to that prompt: `(words − min) / min`. |
 | `padding_score` | 0–100 composite of verbosity-bias + hedge/caveat/filler density. |
+| `answer_coverage` | Fraction of the prompt's core-answer keywords present in the response. |
+| `signal_efficiency` | Core-answer coverage per 10 words — higher = concise *and* complete. |
 
 ## Practical takeaway
 
