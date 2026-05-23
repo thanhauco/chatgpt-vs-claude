@@ -7,6 +7,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from verbosity_lab import config  # noqa: E402
 from verbosity_lab.experiment import run_experiment  # noqa: E402
+from verbosity_lab.judge import MockJudge  # noqa: E402
 from verbosity_lab.providers import MockProvider  # noqa: E402
 
 
@@ -21,7 +22,7 @@ def main() -> None:
     ]
 
     print("Generating synthetic comparison data (mock providers)...")
-    df = run_experiment(providers, prompts, techniques, temperatures, repeats=2)
+    df = run_experiment(providers, prompts, techniques, temperatures, repeats=2, judge=MockJudge())
 
     out = config.DATA_DIR / "sample_results.csv"
     out.parent.mkdir(parents=True, exist_ok=True)

@@ -10,11 +10,24 @@ from dotenv import load_dotenv  # noqa: E402
 
 from verbosity_lab import config  # noqa: E402
 from verbosity_lab.experiment import run_experiment  # noqa: E402
+from verbosity_lab.judge import LLMJudge, MockJudge  # noqa: E402
 from verbosity_lab.providers import (  # noqa: E402
     AnthropicProvider,
     MockProvider,
     OpenAIProvider,
 )
+
+
+def build_judge(name):
+    if name in (None, "none"):
+        return None
+    if name == "mock":
+        return MockJudge()
+    if name == "openai":
+        return LLMJudge(OpenAIProvider())
+    if name == "anthropic":
+        return LLMJudge(AnthropicProvider())
+    raise SystemExit(f"Unknown judge: {name}")
 
 
 def build_providers(names):
@@ -42,6 +55,10 @@ def main() -> None:
     )
     p.add_argument("--temperatures", nargs="+", type=float, default=[0.0, 0.2, 0.5, 0.7, 1.0])
     p.add_argument("--repeats", type=int, default=1)
+    p.add_argument(
+        "--judge", default="none", choices=["none", "mock", "openai", "anthropic"],
+        help="Score each response for relevance/completeness/conciseness.",
+    )
     p.add_argument("--out", default=str(config.DATA_DIR / "results.csv"))
     args = p.parse_args()
 
@@ -52,6 +69,7 @@ def main() -> None:
         config.load_techniques(),
         args.temperatures,
         repeats=args.repeats,
+        judge=build_judge(args.judge),
     )
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(args.out, index=False)
