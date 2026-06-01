@@ -16,6 +16,7 @@ def run_experiment(
     techniques: List[Dict],
     temperatures: Sequence[float],
     repeats: int = 1,
+    judge=None,
     verbose: bool = True,
 ) -> pd.DataFrame:
     rows = []
@@ -49,6 +50,12 @@ def run_experiment(
         cov = answer_coverage(result.text, prompt.get("core_answer", ""))
         row["answer_coverage"] = cov
         row["signal_efficiency"] = round(10 * cov / max(row["word_count"], 1), 3)
+        if judge is not None:
+            jr = judge.score(prompt["prompt"], result.text)
+            row["judge_relevance"] = jr.relevance
+            row["judge_completeness"] = jr.completeness
+            row["judge_conciseness"] = jr.conciseness
+            row["judge_overall"] = jr.overall
         rows.append(row)
         if verbose and (i % 50 == 0 or i == total):
             print(f"  [{i}/{total}] generated")
