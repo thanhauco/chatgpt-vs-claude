@@ -155,6 +155,23 @@ with tab_analysis:
     st.caption("Slope = extra words per +1.0 temperature. Higher = more length sensitivity.")
     st.dataframe(analysis.temperature_trend(df), use_container_width=True, hide_index=True)
 
+    if "judge_overall" in df.columns:
+        st.markdown("---")
+        st.subheader("LLM-judge scores (relevance / completeness / conciseness)")
+        jcols = ["judge_relevance", "judge_completeness", "judge_conciseness", "judge_overall"]
+        jmean = df.groupby("provider")[jcols].mean().round(2).reset_index()
+        st.dataframe(jmean, use_container_width=True, hide_index=True)
+        melt = jmean.melt(id_vars="provider", var_name="dimension", value_name="score")
+        fig = px.bar(
+            melt, x="dimension", y="score", color="provider", barmode="group",
+            color_discrete_map=PROVIDER_COLORS, title="Judge scores by dimension (1-5)",
+        )
+        st.plotly_chart(fig, use_container_width=True)
+        st.caption(
+            "Default sample uses a heuristic MockJudge. Run "
+            "`run_experiment.py --judge openai|anthropic` for a real LLM judge."
+        )
+
 # --- Verbosity-bias --------------------------------------------------------- #
 with tab_bias:
     st.subheader("Verbosity-bias: extra words vs the leanest answer to the same prompt")

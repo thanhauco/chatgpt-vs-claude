@@ -55,6 +55,8 @@ def summarize(df: pd.DataFrame) -> pd.DataFrame:
         agg_spec["avg_coverage"] = ("answer_coverage", "mean")
     if "signal_efficiency" in df.columns:
         agg_spec["avg_efficiency"] = ("signal_efficiency", "mean")
+    if "judge_overall" in df.columns:
+        agg_spec["avg_judge_overall"] = ("judge_overall", "mean")
     agg = df.groupby(["provider", "model"]).agg(**agg_spec).reset_index()
     for c in agg.columns:
         if agg[c].dtype.kind == "f":
