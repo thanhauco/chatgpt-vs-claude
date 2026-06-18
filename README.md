@@ -128,6 +128,26 @@ The report includes:
 
 The same analysis powers the dashboard's **Analysis** tab.
 
+## Relevance LLM-judge (live runs)
+
+Conciseness only matters if the answer stays relevant. For live runs you can score every
+response with an LLM judge on **relevance, completeness, and conciseness** (1–5 each):
+
+```powershell
+python scripts/run_experiment.py --providers openai anthropic --judge openai `
+  --temperatures 0.0 0.5 --out data/results.csv
+```
+
+- `--judge mock` — offline heuristic judge (no API calls); used for the default sample.
+- `--judge openai` / `--judge anthropic` — a real model grades each response at temperature 0.
+
+Judge columns (`judge_relevance`, `judge_completeness`, `judge_conciseness`,
+`judge_overall`) show up in the dashboard's **Analysis** tab. See
+[src/verbosity_lab/judge.py](src/verbosity_lab/judge.py).
+
+> ⚠️ The default sample uses a **heuristic** `MockJudge`, not a real LLM — it is
+> illustrative. Use a real `--judge` for live evaluation.
+
 ## Project layout
 
 ```
